@@ -17,16 +17,15 @@ namespace TicTacToeProgram
         }
         public char myChoice()
         {
-            Console.WriteLine("Enter your choice: x or o");
             string mychoice = Console.ReadLine();
             char Computer;
-            if (mychoice == "x")
+            if (mychoice == "X")
             {
-                Computer = 'o';
+                Computer = 'O';
             }
             else
             {
-                Computer = 'x';
+                Computer = 'X';
             }
             return Computer;
         }
@@ -42,21 +41,18 @@ namespace TicTacToeProgram
         {
             Console.WriteLine("Enter the index (from 1 to 9) for the move");
             int index = Convert.ToInt32(Console.ReadLine());
-            if (board[index] == ' ' && index > 1 && index < 10)
+            if (board[index] == ' ')
             {
-                Console.WriteLine("Possible to move at this location");
                 return true;
-            }
-            else if (index < 0 || index > 9)
-            {
-                Console.WriteLine("Enter valid position");
-                return false;
             }
             else
             {
                 return false;
             }
         }
+        public void makeAMove(int index)
+        {
+            board[index] = myChoice();
+        }
     }
 }
-
