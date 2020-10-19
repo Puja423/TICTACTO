@@ -6,11 +6,11 @@ namespace TicTacToeProgram
 {
     public class TicTacToeGame
     {
-        char[] board = new char[10];
+        public char[] board = new char[10];
 
         public void TicTacToeBoard()
         {
-            for (int i = 1; i < board.Length; i++)
+            for (int i = 1; i < 10; i++)
             {
                 board[i] = ' ';
             }
@@ -48,8 +48,7 @@ namespace TicTacToeProgram
             else
             {
                 Console.WriteLine("Sorry, position is already occupied. \n Select any other position");
-                Console.WriteLine("Enter the index (from 1 to 9) for the move");
-                isPossible(index);
+                Console.WriteLine("Select the position you want to play on");
                 return false;
             }
         }
@@ -70,16 +69,117 @@ namespace TicTacToeProgram
                 return Player.COMPUTER;
             }
         }
-        public bool isWinner(char[] b, char ch)
+        public bool isWinner(char ch)
         {
-            return (b[1] == ch && b[2] == ch && b[3] == ch) ||
-                    (b[4] == ch && b[5] == ch && b[6] == ch) ||
-                    (b[7] == ch && b[8] == ch && b[9] == ch) ||
-                    (b[1] == ch && b[4] == ch && b[7] == ch) ||
-                    (b[2] == ch && b[5] == ch && b[8] == ch) ||
-                    (b[3] == ch && b[6] == ch && b[9] == ch) ||
-                    (b[1] == ch && b[5] == ch && b[9] == ch) ||
-                    (b[7] == ch && b[5] == ch && b[3] == ch);
+            return (board[1] == ch && board[2] == ch && board[3] == ch) ||
+                    (board[4] == ch && board[5] == ch && board[6] == ch) ||
+                    (board[7] == ch && board[8] == ch && board[9] == ch) ||
+                    (board[1] == ch && board[4] == ch && board[7] == ch) ||
+                    (board[2] == ch && board[5] == ch && board[8] == ch) ||
+                    (board[3] == ch && board[6] == ch && board[9] == ch) ||
+                    (board[1] == ch && board[5] == ch && board[9] == ch) ||
+                    (board[7] == ch && board[5] == ch && board[3] == ch);
+        }
+        public void PlayerMovement(char choice)
+        {
+            int userChoice = Convert.ToInt32(Console.ReadLine());
+            if (isPossible(userChoice))
+            {
+                board[userChoice] = choice;
+                Console.WriteLine("Succeed");
+                ShowBoard();
+            }
+            else
+            {
+                Console.WriteLine("Position already occupied");
+                Console.WriteLine("Try Again");
+                PlayerMovement(choice);
+            }
+        }
+        public void ComputerMovement(char compChoice)
+        {
+            int winMove = WinningMove(compChoice);
+            if (winMove == 0)
+            {
+                Random random = new Random();
+                int computerChoice = random.Next(1, 10);
+                if (isPossible(computerChoice))
+                {
+                    board[computerChoice] = compChoice;
+                    ShowBoard();
+                }
+                else
+                {
+                    ComputerMovement(compChoice);
+                }
+            }
+            else
+            {
+                board[winMove] = compChoice;
+                ShowBoard();
+            }
+        }
+        public int WinningMove(char compChoice)
+        {
+            int winningIndex = 0;
+            for (int i = 1; i < 10; i++)
+            {
+                if (isPossible(i) == true)
+                {
+                    board[i] = compChoice;
+                    if (isWinner('X') == true || isWinner('O') == true)
+                    {
+                        board[i] = ' ';
+                        winningIndex = i;
+                        break;
+                    }
+                    else
+                    {
+                        board[i] = ' ';
+                        winningIndex = 0;
+                        continue;
+                    }
+                }
+                else
+                    continue;
+            }
+            return winningIndex;
+        }
+        public void GamePlay(char userChoice, char compChoice)
+        {
+            Player player = Toss();
+            while (isWinner('X') == false || isWinner('O') == false)
+            {
+                if (player.Equals(Player.USER))
+                {
+                    PlayerMovement(userChoice);
+                    player = Player.COMPUTER;
+                }
+                else
+                {
+                    ComputerMovement(compChoice);
+                    player = Player.USER;
+                }
+                char userLetter = myChoice();
+                bool winner = isWinner(userLetter);
+                if (winner == true)
+                {
+                    if (player == Player.USER)
+                    {
+                        Console.WriteLine("Computer won");
+                        break;
+                    }
+                    if (player == Player.COMPUTER)
+                    {
+                        Console.WriteLine("User won");
+                        break;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
         }
     }
 }
