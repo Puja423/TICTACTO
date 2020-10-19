@@ -1,12 +1,14 @@
 ﻿using System;
 
-namespace tactictoe
+namespace TicTacToeProgram
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Welcome to TicTacToe Game");
+            TicTacToe Game = new TicTacToe();
+            Game.TicTacToeGame();
         }
     }
 }
